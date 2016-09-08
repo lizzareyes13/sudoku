@@ -14,9 +14,39 @@ $.ajax({
         }
       }
     }
+
+
+
   }
 });
 
-button.onClick = function(){
-  // what happens when the button is clicked
+
+function getData(){
+  var cells = $("td");
+  var grid = Array(9).fill(0).map(e => Array(9).fill(0));
+
+  for(var i = 0; i < cells.length; i++){
+    var row = Math.floor(i/9)
+    var col = i%9;
+    if (     $(cells[i]).html().length > 1     ){
+      grid [row][col] = $(cells[i]).find("input").val();
+    }
+    else {
+      grid[row][col] = $(cells[i]).html();
+    }
+    }
+return grid
 }
+
+
+$("#button").click(function(){
+  $.ajax({
+    url: "http://fvi-grad.com:4004/sudoku",
+    method: 'POST',
+    data: {board: getData()},
+    success: function(res,txt, xhr){
+      alert("validation result: " + res);
+    }
+  })
+}
+)
